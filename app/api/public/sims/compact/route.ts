@@ -15,12 +15,13 @@ export async function GET(request: NextRequest) {
     const query = compactSearchSchema.parse({
       q: request.nextUrl.searchParams.get('q'),
       inventoryId: request.nextUrl.searchParams.get('inventoryId') ?? undefined,
+      dealerId: request.nextUrl.searchParams.get('dealerId') ?? undefined,
+      categoryId: request.nextUrl.searchParams.get('categoryId') ?? undefined,
+      minPrice: request.nextUrl.searchParams.get('minPrice') ?? undefined,
+      maxPrice: request.nextUrl.searchParams.get('maxPrice') ?? undefined,
     })
 
-    const result = await getCompactSimSearch({
-      q: query.q,
-      inventoryId: query.inventoryId ? Number(query.inventoryId) : undefined,
-    })
+    const result = await getCompactSimSearch(query)
 
     return okJson(result)
   } catch {

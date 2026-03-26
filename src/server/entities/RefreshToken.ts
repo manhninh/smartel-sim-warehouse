@@ -6,14 +6,14 @@ export class RefreshToken {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', type: 'integer' })
   userId!: number
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user!: User
 
-  @Column({ name: 'token_hash' })
+  @Column({ name: 'token_hash', type: 'varchar' })
   tokenHash!: string
 
   @Column({ name: 'expires_at', type: 'timestamptz' })
@@ -22,6 +22,6 @@ export class RefreshToken {
   @Column({ name: 'revoked_at', type: 'timestamptz', nullable: true })
   revokedAt!: Date | null
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date
 }

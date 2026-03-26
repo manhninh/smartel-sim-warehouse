@@ -1,3 +1,4 @@
+import { IsNull } from 'typeorm'
 import { addSeconds } from '@/server/utils/time'
 import { getDataSource } from '@/server/db/data-source'
 import { RefreshToken } from '@/server/entities/RefreshToken'
@@ -15,7 +16,7 @@ export async function createRefreshTokenRecord(userId: number, tokenHash: string
 
 export async function findActiveRefreshTokensByUser(userId: number) {
   const db = await getDataSource()
-  return db.getRepository(RefreshToken).find({ where: { userId, revokedAt: null } })
+  return db.getRepository(RefreshToken).find({ where: { userId, revokedAt: IsNull() } })
 }
 
 export async function revokeRefreshTokenById(id: number) {

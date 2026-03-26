@@ -9,7 +9,16 @@ export const redis = globalForRedis.redisClient ?? createClient({ url: env.redis
 
 if (!globalForRedis.redisClient) {
   globalForRedis.redisClient = redis
-  redis.connect().catch((error) => {
+}
+
+let didConnect = false
+
+export async function ensureRedisConnected() {
+  if (!env.cacheEnabled || didConnect || redis.isOpen) return
+  try {
+    await redis.connect()
+    didConnect = true
+  } catch (error) {
     console.error('Redis connect error', error)
-  })
+  }
 }

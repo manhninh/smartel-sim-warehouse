@@ -1,6 +1,7 @@
 import { getDataSource } from '@/server/db/data-source'
 import { PriceHistory } from '@/server/entities/PriceHistory'
 import { findListingById, updateListingPrice } from '@/server/repositories/sim-listing.repository'
+import { invalidateCompactSearchCache } from '@/server/cache/search-cache'
 
 export async function changeListingPrice(input: {
   listingId: number
@@ -22,6 +23,8 @@ export async function changeListingPrice(input: {
     newSalePrice: input.salePrice.toFixed(2),
     changedByUserId: input.changedByUserId,
   })
+
+  await invalidateCompactSearchCache()
 
   return { success: true }
 }

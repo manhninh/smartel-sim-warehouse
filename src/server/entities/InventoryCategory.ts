@@ -5,15 +5,18 @@ export class InventoryCategory {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   code!: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string
 
-  @CreateDateColumn({ name: 'created_at' })
+  @Column({ type: 'varchar', default: 'active' })
+  status!: string
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date
 }
