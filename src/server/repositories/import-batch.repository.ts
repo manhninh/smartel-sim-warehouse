@@ -5,3 +5,8 @@ export async function createImportBatch(input: Omit<ImportBatch, 'id' | 'created
   const db = await getDataSource()
   return db.getRepository(ImportBatch).save(input)
 }
+
+export async function updateImportBatch(id: number, input: Partial<ImportBatch>) {
+  const db = await getDataSource()
+  await db.getRepository(ImportBatch).update({ id }, input)
+}

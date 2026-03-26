@@ -7,35 +7,35 @@ export class Inventory {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ name: 'dealer_id' })
+  @Column({ name: 'dealer_id', type: 'integer' })
   dealerId!: number
 
   @ManyToOne(() => DealerProfile)
   @JoinColumn({ name: 'dealer_id' })
   dealer!: DealerProfile
 
-  @Column({ name: 'category_id' })
+  @Column({ name: 'category_id', type: 'integer' })
   categoryId!: number
 
   @ManyToOne(() => InventoryCategory)
   @JoinColumn({ name: 'category_id' })
   category!: InventoryCategory
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   code!: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string
 
-  @Column({ default: 'public' })
+  @Column({ type: 'varchar', default: 'public' })
   visibility!: string
 
-  @Column({ default: 'active' })
+  @Column({ type: 'varchar', default: 'active' })
   status!: string
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date
 }

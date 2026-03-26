@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { requireAccessUser, requireAdminUsername } from '@/server/auth/guards'
-import { importExcelStub } from '@/server/services/import-excel.service'
+import { importExcel } from '@/server/services/import-excel.service'
 import { errorJson, okJson } from '@/server/utils/api-response'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAccessUser(request)
-    requireAdminUsername(session.username)
+    requireAdminUsername(session.username, session.role)
 
     const form = await request.formData()
     const dealerId = Number(form.get('dealerId'))
@@ -18,12 +18,13 @@ export async function POST(request: NextRequest) {
       return errorJson('Thiếu file import', 400)
     }
 
-    const result = await importExcelStub({
+    const result = await importExcel({
       userId: Number(session.sub),
       dealerId,
       inventoryId,
       inventoryCategoryId,
       fileName: file.name,
+      fileBuffer: new Uint8Array(await file.arrayBuffer()),
     })
 
     return okJson(result)

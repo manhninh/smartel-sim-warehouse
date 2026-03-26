@@ -7,7 +7,7 @@ export class PriceHistory {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ name: 'sim_listing_id' })
+  @Column({ name: 'sim_listing_id', type: 'integer' })
   simListingId!: number
 
   @ManyToOne(() => SimListing)
@@ -26,13 +26,13 @@ export class PriceHistory {
   @Column({ name: 'new_sale_price', type: 'numeric', precision: 18, scale: 2, nullable: true })
   newSalePrice!: string | null
 
-  @Column({ name: 'changed_by_user_id' })
+  @Column({ name: 'changed_by_user_id', type: 'integer' })
   changedByUserId!: number
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'changed_by_user_id' })
   changedByUser!: User
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date
 }

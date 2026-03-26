@@ -7,7 +7,7 @@ import { errorJson, okJson } from '@/server/utils/api-response'
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireAccessUser(request)
-    requireAdminUsername(session.username)
+    requireAdminUsername(session.username, session.role)
 
     const params = await context.params
     const body = updatePriceSchema.parse(await request.json())

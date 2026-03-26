@@ -5,18 +5,18 @@ export class DealerProfile {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   code!: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string
 
-  @Column({ default: 'active' })
+  @Column({ type: 'varchar', default: 'active' })
   status!: string
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date
 }

@@ -1,12 +1,17 @@
 import { findUserById, findUserByUsername } from '@/server/repositories/user.repository'
-import { createRefreshTokenRecord, findActiveRefreshTokensByUser, revokeRefreshTokenById } from '@/server/repositories/refresh-token.repository'
+import {
+  createRefreshTokenRecord,
+  findActiveRefreshTokensByUser,
+  revokeRefreshTokenById,
+} from '@/server/repositories/refresh-token.repository'
 import { verifyPassword } from '@/server/auth/password'
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '@/server/auth/tokens'
 import { sha256 } from '@/server/utils/hash'
+import { env } from '@/server/utils/env'
 import type { JwtUserPayload } from '@/types'
 
 function toPayload(input: { id: number; username: string; role: 'ADMIN' | 'DEALER' | 'CUSTOMER' }): JwtUserPayload {
-  return { sub: input.id, username: input.username, role: input.role }
+  return { sub: String(input.id), username: input.username, role: input.role }
 }
 
 export async function loginByUsernamePassword(username: string, password: string) {
@@ -24,12 +29,13 @@ export async function loginByUsernamePassword(username: string, password: string
   return {
     accessToken,
     refreshToken,
-    expiresIn: 900,
+    expiresIn: env.jwt.accessTtlSeconds,
     user: {
       id: user.id,
       username: user.username,
       role: user.role,
       fullName: user.fullName,
+      apiKey: user.apiKey,
     },
   }
 }
@@ -43,7 +49,7 @@ export async function refreshUserSession(refreshToken: string) {
 
   await revokeRefreshTokenById(matched.id)
   const user = await findUserById(userId)
-  if (!user) throw new Error('INVALID_REFRESH_TOKEN')
+  if (!user || !user.isActive) throw new Error('INVALID_REFRESH_TOKEN')
 
   const nextPayload = toPayload({ id: user.id, username: user.username, role: user.role })
   const nextAccessToken = await signAccessToken(nextPayload)
@@ -53,7 +59,7 @@ export async function refreshUserSession(refreshToken: string) {
   return {
     accessToken: nextAccessToken,
     refreshToken: nextRefreshToken,
-    expiresIn: 900,
+    expiresIn: env.jwt.accessTtlSeconds,
   }
 }
 
