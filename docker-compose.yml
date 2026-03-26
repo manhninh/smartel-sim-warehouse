@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: smartel-sim-postgres
+    environment:
+      POSTGRES_USER: smartel
+      POSTGRES_PASSWORD: smartel
+      POSTGRES_DB: smartel_sim
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker-data/postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8-alpine
+    container_name: smartel-sim-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.docker-data/redis:/data
